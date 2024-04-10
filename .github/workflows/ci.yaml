@@ -27,8 +27,10 @@ jobs:
         node-version: ${{ matrix.node }}
         registry-url: https://registry.npmjs.org/
 
-    - name: checkout
-      uses: actions/checkout@v2
+    - name: checkout v3
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Install dependencies
       run: yarn install --frozen-lockfile
@@ -38,3 +40,14 @@ jobs:
 
     - name: Test
       run: yarn test
+
+    - name: Commit built files
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+        git add dist/*
+        git commit -m "Built and committed dist files"
+
+    - name: Push
+      run: git push origin
