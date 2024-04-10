@@ -10909,6 +10909,42 @@ var Amplitude = function () {
   }
 
   /**
+   * Set a song at the index passed in from the songs array.
+   *
+   * Public Accessor: Amplitude.setSongAtIndex( index )
+   *
+   * @access public
+   * @param {number} index  - The number representing the song in the songs array.
+   */
+  function setSongAtIndex(index) {
+    /*
+       Stop the current song.
+    */
+    _core2.default.stop();
+
+    /*
+       Determine if there is a new playlist, if so set the active playlist and change the song.
+    */
+    if (_checks2.default.newPlaylist(null)) {
+      _audioNavigation2.default.setActivePlaylist(null);
+
+      _audioNavigation2.default.changeSong(_config2.default.songs[index], index);
+    }
+
+    /*
+       Check if the song is new. If so, change the song.
+    */
+    if (_checks2.default.newSong(null, index)) {
+      _audioNavigation2.default.changeSong(_config2.default.songs[index], index);
+    }
+
+    /*
+      Sync all of the play pause buttons.
+    */
+    _playPauseElements2.default.sync();
+  }
+
+  /**
    * Plays a song at the index passed in from the songs array.
    *
    * Public Accessor: Amplitude.playSongAtIndex( index )
@@ -11501,6 +11537,7 @@ var Amplitude = function () {
     removeSong: removeSong,
     removeSongFromPlaylist: removeSongFromPlaylist,
     playNow: playNow,
+    setSongAtIndex: setSongAtIndex,
     playSongAtIndex: playSongAtIndex,
     playPlaylistSongAtIndex: playPlaylistSongAtIndex,
     play: play,
